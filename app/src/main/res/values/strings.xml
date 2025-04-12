@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GymLogPractive</string>
+    <string name="app_name">GymLogPractice</string>
     <string name="exercise">Exercise</string>
     <string name="enter_an_exercise">Enter an Exercise</string>
     <string name="weight">Weight</string>
