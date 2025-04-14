@@ -1,4 +1,4 @@
-package com.example.gymlogpractive;
+package com.example.gymlogpractice;
 
 import android.content.Context;
 
