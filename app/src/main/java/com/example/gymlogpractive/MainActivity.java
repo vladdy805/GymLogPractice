@@ -11,6 +11,7 @@ import com.example.gymlogpractive.database.GymLogRepository;
 import com.example.gymlogpractive.database.entities.GymLog;
 import com.example.gymlogpractive.databinding.ActivityMainBinding;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     String mExercise = "";
     double mWeight = 0.0;
     int mReps = 0;
+    int loggedInUserId = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
         binding.logDisplayTextView.setMovementMethod(new ScrollingMovementMethod());
 
+        updateDisplay();
         binding.logButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -42,24 +45,37 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        binding.exerciseInputEditText.setOnClickListener(new View .OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateDisplay();
+            }
+        });
+
     }
 
     private void insertGymLogRecord() {
-        GymLog log = new GymLog(mExercise, mWeight, mReps);
+        if (mExercise.isEmpty()) {
+            return;
+        }
+        GymLog log = new GymLog(mExercise, mWeight, mReps, loggedInUserId);
         if (repository != null) {
             repository.insertGymLog(log);
         } else {
             Log.e(TAG, "Repository is null");
         }
-
     }
 
     private void updateDisplay() {
-        String currentInfo = binding.logDisplayTextView.getText().toString();
-        Log.d(TAG, "Current info: " + currentInfo);
-        String newDisplay = String.format(Locale.US, "Exercise: %s%nWeight: %.2f%nReps: %d%n=-=-=%n", mExercise, mWeight, mReps);
-        binding.logDisplayTextView.setText(currentInfo + newDisplay);
-        Log.i(TAG, repository.getAllLogs().toString());
+        ArrayList<GymLog> allLogs = repository.getAllLogs();
+        if(allLogs.isEmpty()) {
+            binding.logDisplayTextView.setText(R.string.time_to_hit_the_gym);
+        }
+        StringBuilder sb = new StringBuilder();
+        for (GymLog log : allLogs) {
+            sb.append(log);
+        }
+        binding.logDisplayTextView.setText(sb.toString());
     }
 
     private void getInformationFromDisplay() {
