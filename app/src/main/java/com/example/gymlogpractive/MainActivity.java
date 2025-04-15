@@ -1,5 +1,6 @@
 package com.example.gymlogpractive;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,7 +28,6 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private static final String MAIN_ACTIVITY_USER_ID = "com.example.gymlogpractive.MAIN_ACTIVITY_USER_ID";
-    static final String SHARED_PREFERENCE_USERID_KEY = "com.example.gymlogpractive.SHARED_PREFERENCE_USERID_KEY";
 
     private static final int LOGGED_OUT = -1;
     private static final String SAVED_INSTANCE_STATE_USERID_KEY = "com.example.gymlogpractive.SAVED_INSTANCE_STATE_USERID_KEY";
@@ -199,6 +199,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private void updateDisplay() {
         ArrayList<GymLog> allLogs = repository.getAllLogsByUserId(loggedInUserId);
         if (allLogs.isEmpty()) {
