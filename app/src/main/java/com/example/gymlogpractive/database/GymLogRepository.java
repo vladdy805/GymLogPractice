@@ -29,6 +29,10 @@ public class GymLogRepository {
         this.allLogs = (ArrayList<GymLog>) this.gymLogDAO.getAllRecords();
     }
 
+    /**
+     * Gets all GymLog records.
+     * Returns null if an error occurs.
+     */
     public static GymLogRepository getRepository(Application application) {
         if (repository != null) {
             return repository;
@@ -66,14 +70,21 @@ public class GymLogRepository {
         return null;
     }
 
+    /**
+     * Inserts a GymLog record.
+     */
     public void insertGymLog(GymLog gymLog) {
         GymLogDatabase.databaseWriteExecutor.execute(() -> gymLogDAO.insert(gymLog));
     }
-
+    /**
+     * Returns LiveData with the User matching the given username.
+     */
     public LiveData<User> getUserByUsername(String username) {
         return userDAO.getUserByUsername(username);
     }
-
+    /**
+     * Returns LiveData with the User matching the given user ID.
+     */
     public LiveData<User> getUserByUserId(int userId) {
         return userDAO.getUserByUserId(userId);
     }

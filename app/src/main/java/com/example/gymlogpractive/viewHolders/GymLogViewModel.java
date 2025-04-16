@@ -13,7 +13,6 @@ import java.util.List;
 public class GymLogViewModel extends AndroidViewModel {
     private final GymLogRepository repository;
 
-    //private final LiveData<List<GymLog>> allLogsById;
 
     public GymLogViewModel(Application application) {
         super(application);

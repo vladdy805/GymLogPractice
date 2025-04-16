@@ -13,13 +13,18 @@ import com.example.gymlogpractive.database.GymLogRepository;
 import com.example.gymlogpractive.database.entities.User;
 import com.example.gymlogpractive.databinding.ActivityLoginBinding;
 
+/**
+ * Checks user credentials for main activity.
+ */
 public class LoginActivity extends AppCompatActivity {
 
     private ActivityLoginBinding binding;
 
     private GymLogRepository repository;
 
-
+    /**
+     * Initializes the activity, view binding, and sets the login button listener.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +41,9 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Validates the username and password and opens MainActivity.
+     */
     private void verifyUser() {
         String username = binding.userNameLoginEditText.getText().toString();
 

@@ -47,6 +47,9 @@ public abstract class GymLogDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
+    /**
+     * Callback to insert default values when the database is created.
+     */
     private static final RoomDatabase.Callback addDefaultValues = new RoomDatabase.Callback() {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
