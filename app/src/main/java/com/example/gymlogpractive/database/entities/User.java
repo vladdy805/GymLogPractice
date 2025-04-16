@@ -15,12 +15,19 @@ public class User {
     private String password;
     private boolean isAdmin;
 
+    /**
+     * Constructor for creating a new user with a username and password.
+     */
     public User(String username, String password) {
         this.username = username;
         this.password = password;
         this.isAdmin = false;
     }
 
+    /**
+     * Checks equality based on id, username, password, and admin status.
+     * Returns true if the given object matches this user.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

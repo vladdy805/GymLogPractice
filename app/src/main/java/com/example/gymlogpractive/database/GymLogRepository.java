@@ -70,10 +70,6 @@ public class GymLogRepository {
         GymLogDatabase.databaseWriteExecutor.execute(() -> gymLogDAO.insert(gymLog));
     }
 
-    public void insertUser(User... user) {
-        GymLogDatabase.databaseWriteExecutor.execute(() -> userDAO.insert(user));
-    }
-
     public LiveData<User> getUserByUsername(String username) {
         return userDAO.getUserByUsername(username);
     }
@@ -82,6 +78,11 @@ public class GymLogRepository {
         return userDAO.getUserByUserId(userId);
     }
 
+    public LiveData<List<GymLog>> getAllLogsByUserIdLiveData(int loggedInUserId) {
+        return gymLogDAO.getAllRecordsByUserIdLiveData(loggedInUserId);
+    }
+
+    @Deprecated
     public ArrayList<GymLog> getAllLogsByUserId(int loggedInUserId) {
         Future<ArrayList<GymLog>> future = GymLogDatabase.databaseWriteExecutor.submit(
                 new Callable<ArrayList<GymLog>>() {

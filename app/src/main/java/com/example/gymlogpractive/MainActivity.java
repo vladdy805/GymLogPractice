@@ -1,12 +1,10 @@
 package com.example.gymlogpractive;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,11 +15,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gymlogpractive.database.GymLogRepository;
 import com.example.gymlogpractive.database.entities.GymLog;
 import com.example.gymlogpractive.database.entities.User;
 import com.example.gymlogpractive.databinding.ActivityMainBinding;
+import com.example.gymlogpractive.viewHolders.GymLogAdapter;
+import com.example.gymlogpractive.viewHolders.GymLogViewModel;
 
 import java.util.ArrayList;
 
@@ -33,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String SAVED_INSTANCE_STATE_USERID_KEY = "com.example.gymlogpractive.SAVED_INSTANCE_STATE_USERID_KEY";
     private ActivityMainBinding binding;
     private GymLogRepository repository;
+    private GymLogViewModel gymLogViewModel;
 
     public static final String TAG = "DAC_GYMLOG";
     String mExercise = "";
@@ -47,9 +51,20 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        repository = GymLogRepository.getRepository(getApplication());
 
+        gymLogViewModel = new ViewModelProvider(this).get(GymLogViewModel.class);
+
+        RecyclerView recyclerView = binding.logDisplayRecyclerView;
+        final GymLogAdapter adapter = new GymLogAdapter(new GymLogAdapter.GymLogDiff());
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        repository = GymLogRepository.getRepository(getApplication());
         loginUser(savedInstanceState);
+
+        gymLogViewModel.getAllLogsById(loggedInUserId).observe(this, gymLogs -> {
+            adapter.submitList(gymLogs);
+        });
 
         if (loggedInUserId == -1) {
             Intent intent = LoginActivity.loginIntentFactory(getApplicationContext());
@@ -59,22 +74,21 @@ public class MainActivity extends AppCompatActivity {
         updateSharedPreference();
 
 
-        binding.logDisplayTextView.setMovementMethod(new ScrollingMovementMethod());
 
-        updateDisplay();
+
         binding.logButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getInformationFromDisplay();
                 insertGymLogRecord();
-                updateDisplay();
+
             }
         });
 
         binding.exerciseInputEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateDisplay();
+
             }
         });
 
@@ -199,18 +213,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @SuppressLint("SetTextI18n")
-    private void updateDisplay() {
-        ArrayList<GymLog> allLogs = repository.getAllLogsByUserId(loggedInUserId);
-        if (allLogs.isEmpty()) {
-            binding.logDisplayTextView.setText("Nothing to show");
-        }
-        StringBuilder sb = new StringBuilder();
-        for (GymLog log : allLogs) {
-            sb.append(log);
-        }
-        binding.logDisplayTextView.setText(sb.toString());
-    }
 
     private void getInformationFromDisplay() {
         mExercise = binding.exerciseInputEditText.getText().toString();

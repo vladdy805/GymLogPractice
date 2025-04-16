@@ -20,6 +20,10 @@ public class GymLog {
     private LocalDateTime date;
     private int userId;
 
+    /**
+     * Constructs a GymLog with exercise, weight, reps, and userId.
+     * Sets the date to the current time.
+     */
     public GymLog(String exercise, double weight, int reps, int userId) {
         this.exercise = exercise;
         this.weight = weight;
@@ -28,6 +32,10 @@ public class GymLog {
         date = LocalDateTime.now();
     }
 
+    /**
+     * Returns a string of this GymLog.
+     * Includes exercise, weight, reps, date.
+     */
     @NonNull
     @Override
     public String toString() {
@@ -38,6 +46,9 @@ public class GymLog {
                 "=-=-=-=-=-=-=-=\n";
     }
 
+    /**
+     * Compares this GymLog with another object.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
